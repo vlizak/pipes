@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
        
-    ev.events = EPOLLIN;
+    ev.events = EPOLLIN | EPOLLET;
     ev.data.fd = pipefd[0];
 
     if (epoll_ctl(epollfd, EPOLL_CTL_ADD, pipefd[0], &ev) < 0)
@@ -39,9 +39,9 @@ int main(int argc, char *argv[])
         printf("An error occured while connecting read end of the pipe.\n");
     }
 //    fcntl(pipefd[1], F_SETFL, O_NONBLOCK);
-    fcntl(pipefd[0], F_SETFL, O_NONBLOCK);
+//    fcntl(pipefd[0], F_SETFL, O_NONBLOCK);
 
-    ev.events = EPOLLOUT;
+    ev.events = EPOLLOUT | EPOLLET;
     ev.data.fd = pipefd[1];
 
     if (epoll_ctl(epollfd, EPOLL_CTL_ADD, pipefd[1], &ev) < 0)
